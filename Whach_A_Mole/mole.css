@@ -1,0 +1,33 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    background:url("bakgrunn-spill.jpeg");
+    background-size: cover;
+}
+/*.figur{
+    width: 100px;
+    height: 100px;
+}
+
+.plante{
+    width: 100px;
+    height: 100px;
+}*/
+img {
+    position: relative;
+    z-index: 2; /* Sett en høy z-indeks for bildene */
+}
+svg{
+    background:url("bakke.jpeg");
+    background-size: cover;
+    border: 3px solid white;
+    border-radius: 25px;
+    position: relative;
+    z-index: 1;
+}
+
+.plante{
+    width: 200px;
+    height: 100px;
+}
+
