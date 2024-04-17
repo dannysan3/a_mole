@@ -5,6 +5,23 @@ let slutt = false;
 let piper=[["pipe.png",1],["pipe.png",2],["pipe.png",3],["pipe.png",4],["pipe.png",5],["pipe.png",6],["pipe.png",7],["pipe.png",8],["pipe.png",9]]
 console.log (piper); 
 
+//tenkte å bruke denne funksjonen for å lenke til spillet, men jeg fant en enklere og ryddigere måte å gjøre det på. 
+//async function visSide(filnavn) {
+  //  let response = await fetch(filnavn);
+    /*response status = 200 betyr at siden lastet inn og at den finnes. du vet hvordan det står "404 page not found"? 404
+    betyr at siden ikke finnes. 200 betyr at siden finnes og programmet fant den. altså står det "if (siden finnes)" */
+   // if (response.status == 200) {
+        //variabelen text = koden til sida som vi bytter ti
+       // let text = await response.text();
+        //koden inne i "content" div-en blir erstattet med koden til siden vi bytter til
+       // document.querySelector(".content").innerHTML = text;
+        //kaller på funksjonen som stenger navigatoren, slik at den lukkes når man bytter til en annen side.
+       // closeNav();
+        //hvis siden ikke finnes, altså hvis response.status ikke er 200, skriver vi "kunne ikke finne (filnavn)".
+   /* } else {
+        document.querySelector(".content").innerHTML = "Kunne ikke finne " + filnavn;
+    }
+}*/
 
 function oppstart() {
     startSpill();
@@ -55,11 +72,16 @@ function planteNa() {
         naVerendePlante.style.visibility = "visible"; // Viser bildet på ny posisjon
     }
 }
+naVerendeFigur.addEventListener("click", function() {
+    score += 100;
+    document.getElementById("score").innerHTML = score;
+    console.log("du har trykket på blomsten")
+});
  
-function velgBrikke() {
+/*function velgBrikke() {
     if ( this == naVerendeFigur){
         score += 100;
         document.getElementById("score")
         score.innerHTML="score"
 }
-}
+}*/

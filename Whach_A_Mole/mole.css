@@ -1,7 +1,7 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    background:url("bakgrunn-spill.jpeg");
+    background:url("bilder/bakgrunn-spill.jpeg");
     background-size: cover;
 }
 /*.figur{
@@ -13,12 +13,13 @@ body{
     width: 100px;
     height: 100px;
 }*/
-img {
+/*img {
     position: relative;
-    z-index: 2; /* Sett en høy z-indeks for bildene */
-}
+    z-index: 2;  Sett en høy z-indeks for bildene 
+}*/
+
 svg{
-    background:url("bakke.jpeg");
+    background:url("bilder/bakke.jpeg");
     background-size: cover;
     border: 3px solid white;
     border-radius: 25px;
@@ -31,3 +32,11 @@ svg{
     height: 100px;
 }
 
+#start{
+    margin: 20px;
+}
+
+.klikk{
+    width: 200px;
+    height: 100px;
+}
