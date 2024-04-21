@@ -1,87 +1,98 @@
-let naVerendeFigur;
-let naVerendePlante;
-let score = 0;
-let slutt = false;
-let piper=[["pipe.png",1],["pipe.png",2],["pipe.png",3],["pipe.png",4],["pipe.png",5],["pipe.png",6],["pipe.png",7],["pipe.png",8],["pipe.png",9]]
-console.log (piper); 
-
-//tenkte å bruke denne funksjonen for å lenke til spillet, men jeg fant en enklere og ryddigere måte å gjøre det på. 
-//async function visSide(filnavn) {
-  //  let response = await fetch(filnavn);
-    /*response status = 200 betyr at siden lastet inn og at den finnes. du vet hvordan det står "404 page not found"? 404
-    betyr at siden ikke finnes. 200 betyr at siden finnes og programmet fant den. altså står det "if (siden finnes)" */
-   // if (response.status == 200) {
-        //variabelen text = koden til sida som vi bytter ti
-       // let text = await response.text();
-        //koden inne i "content" div-en blir erstattet med koden til siden vi bytter til
-       // document.querySelector(".content").innerHTML = text;
-        //kaller på funksjonen som stenger navigatoren, slik at den lukkes når man bytter til en annen side.
-       // closeNav();
-        //hvis siden ikke finnes, altså hvis response.status ikke er 200, skriver vi "kunne ikke finne (filnavn)".
-   /* } else {
-        document.querySelector(".content").innerHTML = "Kunne ikke finne " + filnavn;
-    }
-}*/
-
+let plante;
+let blomst;
+let sisteTall = -1;
+let piper=["pipe1", "pipe2", "pipe3", "pipe4", "pipe5", "pipe6", "pipe7", "pipe8", "pipe9"]
+score = 0
+let timer;
+let intervallId;
 function oppstart() {
-    startSpill();
-    trekkPipe();
-    setInterval(figurNa, 2000);
-    setInterval(planteNa, 2000);
-}
-function trekkPipe(){
-    let trukketPipe = Math.floor(Math.random() * 9) + 1;
-    console.log(piper[trukketPipe]+" "+trukketPipe)
+
+    intervallId = setInterval(figurNaa, 2000);
 }
  
-function startSpill() {
+//Henter random brikke, sørger for at man ikke trekker samme
+function randomBrikke() {
+    let ind;
+    do {
+        ind = Math.floor(Math.random() * piper.length);
+    } while (ind === sisteTall); 
+    sisteTall = ind; 
+    return piper[ind];
+}
+
+function figurNaa() {
+    
+    //Trekker tilfeldig pipe og oppdaterer fiugerene
+    let pipeId = randomBrikke();
+    let pipeId2= randomBrikke();
+
+    plante = document.getElementById("p1");
+    blomst = document.getElementById("b1");
+
+    let pipeElement = document.getElementById(pipeId);
+    let pipeElement2 = document.getElementById(pipeId2);
+
+    oppdaterPos(plante, pipeElement);
+    oppdaterPos(blomst, pipeElement2);
 
 }
- 
-function randomBrikke() {
-    let number = Math.floor(Math.random() * 9) + 1; // Justert for å unngå 0 og inkludere 9
-    return "pipe" + number;
+
+//Funksjon for å oppdatere posisjon til elementer
+function oppdaterPos(element, pipeElement) {
+    element.setAttribute("x", pipeElement.getAttribute("x"));
+    element.setAttribute("y", pipeElement.getAttribute("y"));
+    element.style.visibility = "visible";
 }
- 
-function figurNa() {
-    if (naVerendeFigur) {
-        naVerendeFigur.style.visibility = "hidden"; // Skjuler det forrige bildet før flytting
-    }
-    let pipeId = randomBrikke();
-    naVerendeFigur = document.getElementById("p1");
-    let pipeElement = document.getElementById(pipeId);
-    if (pipeElement) {
-        // Oppdaterer naVerendeFigur's posisjon til den valgte pipen
-        naVerendeFigur.setAttribute("x", pipeElement.getAttribute("x"));
-        naVerendeFigur.setAttribute("y", pipeElement.getAttribute("y"));
-        naVerendeFigur.style.visibility = "visible"; // Viser bildet på ny posisjon
-    }
+
+
+function gameOver() {
+    
+    // Henter game over boksen og gjør den synlig
+    let gameOverBox = document.getElementById("game-over-box");
+    gameOverBox.style.display = "block";
+    let rundeScoreSpan = document.getElementById("rundeScore");
+    rundeScoreSpan.textContent = score;
+
+    // Henter highscore tabellen og legger til ny rad
+    let table = document.getElementById("score-table");
+    let newRow = table.insertRow(-1); 
+    let cell1 = newRow.insertCell(0); 
+    let cell2 = newRow.insertCell(1); 
+    let currentDate = new Date();
+    cell1.textContent = currentDate.toLocaleTimeString() 
+    cell2.textContent = score;
+    //Stopper timer slik at figurNaa blir kalt
+    clearInterval(intervallId)
+
+    //Skjuler planter
+    plante.style.visibility = "hidden";
+    blomst.style.visibility = "hidden";
 }
- 
-function planteNa() {
-    if (naVerendePlante) {
-        naVerendePlante.style.visibility = "hidden"; // Skjuler det forrige bildet før flytting
-    }
-    let pipeId = randomBrikke();
-    naVerendePlante = document.getElementById("b1");
-    let pipeElement = document.getElementById(pipeId);
-    if (pipeElement) {
-        // Oppdaterer naVerendePlantes posisjon til den valgte pipen
-        naVerendePlante.setAttribute("x", pipeElement.getAttribute("x"));
-        naVerendePlante.setAttribute("y", pipeElement.getAttribute("y"));
-        naVerendePlante.style.visibility = "visible"; // Viser bildet på ny posisjon
-    }
+
+function spillIgjen() {
+    let gameOverBox= document.getElementById("game-over-box");
+    gameOverBox.style.display = "none";
+    score = 0;
+    oppstart(); 
 }
-naVerendeFigur.addEventListener("click", function() {
-    score += 100;
-    document.getElementById("score").innerHTML = score;
-    console.log("du har trykket på blomsten")
-});
- 
-/*function velgBrikke() {
-    if ( this == naVerendeFigur){
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+
+    let blomst = document.getElementById("b1");
+    let plante = document.getElementById("p1");
+
+    //Hvis man klikker blomst får man poeng
+    blomst.addEventListener("click", function() {
         score += 100;
-        document.getElementById("score")
-        score.innerHTML="score"
-}
-}*/
+        document.getElementById("score").innerHTML = score;
+    });
+
+    //Hvis man trykker planete dør man
+    plante.addEventListener("click", function() {
+        gameOver()
+    });
+
+
+});
