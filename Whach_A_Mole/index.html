@@ -25,7 +25,7 @@
             <image id="p1" class="plante" href="bilder/plante.png" x="0" y="-200" visibility="hidden"></image>
             <image id="b1" class="blomst" href="bilder/blomst.png" x="0" y="-100" visibility="hidden"></image>
         </svg>
-        <table id="score-table">
+        <table id="score-tabell">
             <caption>Highscore</caption>
             <tr>
                 <th>Date</th>
@@ -34,9 +34,8 @@
         </table>
         <div id="game-over-box" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
                 <h2>Game Over!</h2>
-                <p>Din score denne runden: <span id="rundeScore">0</span></p>
+                <p>Din høyeste score denne runden: <span id="rundeScore">0</span></p>
                 <button onclick="spillIgjen()">Play Again</button>
             </div>
         </div>

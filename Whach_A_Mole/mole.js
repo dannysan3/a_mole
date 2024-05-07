@@ -1,27 +1,30 @@
 let plante;
 let blomst;
 let sisteTall = -1;
-let piper=["pipe1", "pipe2", "pipe3", "pipe4", "pipe5", "pipe6", "pipe7", "pipe8", "pipe9"]
 score = 0
-let timer;
 let intervallId;
-function oppstart() {
+let intervalVarighet = 2000; // Initial interval duration
+let harStartet = false; 
+let highScore = 0
 
-    intervallId = setInterval(figurNaa, 2000);
+function oppstart() {
+    intervallId = setInterval(figurNaa, intervalVarighet);
 }
+
  
 //Henter random brikke, sørger for at man ikke trekker samme
 function randomBrikke() {
     let ind;
     do {
-        ind = Math.floor(Math.random() * piper.length);
+        ind = Math.floor(Math.random() * 9) + 1;;
     } while (ind === sisteTall); 
     sisteTall = ind; 
-    return piper[ind];
+    return "pipe"+ind;
 }
 
 function figurNaa() {
-    
+    let harKlikket = false
+
     //Trekker tilfeldig pipe og oppdaterer fiugerene
     let pipeId = randomBrikke();
     let pipeId2= randomBrikke();
@@ -34,6 +37,25 @@ function figurNaa() {
 
     oppdaterPos(plante, pipeElement);
     oppdaterPos(blomst, pipeElement2);
+
+    
+    if (intervalVarighet > 1100 && harStartet) {
+        intervalVarighet -= 100;
+        clearInterval(intervallId);
+        intervallId = setInterval(figurNaa, intervalVarighet);
+    }
+
+    //Hvis brukeren har startet spillet, og ikke klikket på en figur før den bytter plass, mister bruker poeng
+    if (harStartet && !harKlikket) { 
+        score -= 25; 
+        if (score < 0){ //Hvis bruker får - poeng taper bruker
+            score = 0
+            gameOver()
+        }
+        document.getElementById("score").innerHTML = score;
+    }
+   
+      harKlikket = false;
 
 }
 
@@ -51,16 +73,17 @@ function gameOver() {
     let gameOverBox = document.getElementById("game-over-box");
     gameOverBox.style.display = "block";
     let rundeScoreSpan = document.getElementById("rundeScore");
-    rundeScoreSpan.textContent = score;
+    rundeScoreSpan.textContent = highScore;
 
     // Henter highscore tabellen og legger til ny rad
-    let table = document.getElementById("score-table");
-    let newRow = table.insertRow(-1); 
-    let cell1 = newRow.insertCell(0); 
-    let cell2 = newRow.insertCell(1); 
-    let currentDate = new Date();
-    cell1.textContent = currentDate.toLocaleTimeString() 
-    cell2.textContent = score;
+    let tabell = document.getElementById("score-tabell");
+    let nyRad = tabell.insertRow(-1); 
+    let datoKol = nyRad.insertCell(0); 
+    let poengKol = nyRad.insertCell(1); 
+    let dato = new Date();
+    datoKol.textContent = dato.toLocaleTimeString() 
+    poengKol.textContent = highScore;
+    
     //Stopper timer slik at figurNaa blir kalt
     clearInterval(intervallId)
 
@@ -73,6 +96,11 @@ function spillIgjen() {
     let gameOverBox= document.getElementById("game-over-box");
     gameOverBox.style.display = "none";
     score = 0;
+    highScore = 0
+    harStartet = false
+    intervalVarighet = 2000; 
+    document.getElementById("score").innerHTML = score;
+
     oppstart(); 
 }
 
@@ -86,7 +114,12 @@ document.addEventListener("DOMContentLoaded", function() {
     //Hvis man klikker blomst får man poeng
     blomst.addEventListener("click", function() {
         score += 100;
+        if (score > highScore){
+            highScore = score
+        }
+        figurNaa() //Fjern denne hvis du ikke vil at figurer skal oppdatere seg når man har trykket riktig
         document.getElementById("score").innerHTML = score;
+        harStartet = true;
     });
 
     //Hvis man trykker planete dør man

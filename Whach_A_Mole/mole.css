@@ -50,7 +50,7 @@ svg{
     height: 100px;
 }
 
-#score-table {
+#score-tabell {
     position: absolute;
     top: 40px; /* Adjust the top position as needed */
     right: 30px; /* Adjust the right position as needed */
@@ -61,13 +61,13 @@ svg{
     z-index: 2;
 }
 
-#score-table caption {
+#score-tabell caption {
     font-weight: bold;
     padding: 8px;
     font-size: 20px;
 }
 
-#score-table th, #score-table td {
+#score-tabell th, #score-tabell td {
     border: 1px solid black;
     padding: 8px;
     text-align: left;
